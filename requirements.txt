@@ -1,0 +1,10 @@
+Flask
+tensorflow
+numpy
+opencv-python
+pillow
+flask-cors
+werkzeug
+google-generativeai
+gunicorn
+scipy

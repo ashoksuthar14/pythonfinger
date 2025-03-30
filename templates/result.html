@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint Matching Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-container">
+        <nav class="top-nav">
+            <div class="nav-brand">
+                <i class="fas fa-fingerprint"></i>
+                <span>Fingerprint Matcher</span>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="result-card">
+                <h2><i class="fas fa-search"></i> Match Results</h2>
+                
+                <div class="result-section">
+                    <div class="fingerprint-comparison">
+                        <div class="fingerprint-box">
+                            <div class="box-header">
+                                <i class="fas fa-upload"></i>
+                                <h3>Uploaded Fingerprint</h3>
+                            </div>
+                            <div class="image-container">
+                                <img src="{{ url_for('static', filename='uploads/' + uploaded_image) }}" 
+                                     alt="Uploaded Fingerprint" 
+                                     class="fingerprint-image"
+                                     onclick="expandImage(this)">
+                                <div class="zoom-hint">
+                                    <i class="fas fa-search-plus"></i>
+                                    Click to zoom
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-arrow">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        
+                        <div class="fingerprint-box">
+                            <div class="box-header">
+                                <i class="fas fa-check-circle"></i>
+                                <h3>Matched Fingerprint</h3>
+                            </div>
+                            <div class="image-container">
+                                {% if matched_image %}
+                                    <img src="{{ url_for('static', filename='matches/' + matched_image) }}" 
+                                         alt="Matched Fingerprint" 
+                                         class="fingerprint-image"
+                                         onclick="expandImage(this)">
+                                    <div class="zoom-hint">
+                                        <i class="fas fa-search-plus"></i>
+                                        Click to zoom
+                                    </div>
+                                {% else %}
+                                    <div class="no-match">
+                                        <i class="fas fa-times-circle"></i>
+                                        <p>No matching fingerprint found</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="match-details">
+                        {% if result.best_match %}
+                            <div class="match-score">
+                                <div class="score-circle" data-score="{{ result.similarity.rstrip('%') }}">
+                                    <svg viewBox="0 0 36 36" class="score-chart">
+                                        <path d="M18 2.0845
+                                            a 15.9155 15.9155 0 0 1 0 31.831
+                                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            stroke-dasharray="0, 100"/>
+                                    </svg>
+                                    <div class="score-value">{{ result.similarity }}</div>
+                                </div>
+                                <p class="score-label">Match Score</p>
+                            </div>
+                            
+                            {% if result.person_info %}
+                            <div class="person-info">
+                                <h3><i class="fas fa-user"></i> Person Information</h3>
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <i class="fas fa-user-circle"></i>
+                                        <span class="label">Full Name:</span>
+                                        <span class="value">{{ result.person_info.full_name }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span class="label">Age:</span>
+                                        <span class="value">{{ result.person_info.age }} years</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span class="label">Location:</span>
+                                        <span class="value">{{ result.person_info.place }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-birthday-cake"></i>
+                                        <span class="label">Date of Birth:</span>
+                                        <span class="value">{{ result.person_info.date_of_birth }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-id-card"></i>
+                                        <span class="label">National ID:</span>
+                                        <span class="value">{{ result.person_info.national_id_number }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-briefcase"></i>
+                                        <span class="label">Previous Occupation:</span>
+                                        <span class="value">{{ result.person_info.occupation }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span class="label">Years of Service:</span>
+                                        <span class="value">{{ result.person_info.years_of_service }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <span class="label">Monthly Pension:</span>
+                                        <span class="value">KES {{ result.person_info.monthly_pension_amount }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-university"></i>
+                                        <span class="label">Bank Account:</span>
+                                        <span class="value">{{ result.person_info.bank_account_number }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span class="label">Contact:</span>
+                                        <span class="value">{{ result.person_info.contact_number }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="match-info">
+                                <p><i class="fas fa-file"></i> <strong>File:</strong> {{ result.best_match }}</p>
+                            </div>
+                        {% else %}
+                            <div class="no-match-details">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>No matching fingerprint was found in the database.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <a href="/" class="button primary">
+                        <i class="fas fa-upload"></i>
+                        Upload New Fingerprint
+                    </a>
+                    <button onclick="window.print()" class="button secondary">
+                        <i class="fas fa-print"></i>
+                        Print Results
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for expanded image -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img id="expandedImage" class="modal-content">
+    </div>
+
+    <script>
+        // Image zoom functionality
+        function expandImage(img) {
+            const modal = document.getElementById("imageModal");
+            const expandedImg = document.getElementById("expandedImage");
+            modal.style.display = "block";
+            expandedImg.src = img.src;
+        }
+
+        // Close modal
+        document.querySelector('.close-modal').onclick = function() {
+            document.getElementById('imageModal').style.display = "none";
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Animate score circle on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const scoreCircle = document.querySelector('.score-circle');
+            if (scoreCircle) {
+                const score = parseFloat(scoreCircle.dataset.score);
+                const path = scoreCircle.querySelector('path');
+                setTimeout(() => {
+                    path.style.strokeDasharray = `${score}, 100`;
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>

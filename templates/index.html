@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint Matcher</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-container">
+        <nav class="top-nav">
+            <div class="nav-brand">
+                <i class="fas fa-fingerprint"></i>
+                <span>Fingerprint Matcher</span>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="upload-card result-card">
+                <h2><i class="fas fa-upload"></i> Upload Fingerprint</h2>
+                
+                <div class="upload-section">
+                    <form action="/predict" method="post" enctype="multipart/form-data" class="upload-form" id="uploadForm">
+                        <div class="file-upload-container" id="dropZone">
+                            <input type="file" name="file" id="fileInput" accept=".bmp,.jpg,.jpeg,.png" required>
+                            <div class="upload-placeholder">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag & drop your fingerprint image here</p>
+                                <p class="upload-hint">or click to browse</p>
+                                <p class="file-types">Supported formats: BMP, JPG, PNG</p>
+                            </div>
+                            <div class="file-preview" id="filePreview" style="display: none;">
+                                <img id="previewImage" src="" alt="Preview">
+                                <p id="fileName"></p>
+                                <button type="button" class="remove-file" id="removeFile">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="button primary submit-button">
+                            <i class="fas fa-search"></i>
+                            Find Matches
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const previewImage = document.getElementById('previewImage');
+        const fileName = document.getElementById('fileName');
+        const removeFile = document.getElementById('removeFile');
+        const form = document.getElementById('uploadForm');
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        // Highlight drop zone when dragging over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        // Handle dropped files
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function preventDefaults (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            dropZone.classList.add('highlight');
+        }
+
+        function unhighlight(e) {
+            dropZone.classList.remove('highlight');
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+
+            handleFiles(files);
+        }
+
+        fileInput.addEventListener('change', function(e) {
+            handleFiles(this.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length) {
+                const file = files[0];
+                updateFilePreview(file);
+            }
+        }
+
+        function updateFilePreview(file) {
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    fileName.textContent = file.name;
+                    filePreview.style.display = 'block';
+                    dropZone.classList.add('has-file');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        removeFile.addEventListener('click', function() {
+            fileInput.value = '';
+            filePreview.style.display = 'none';
+            dropZone.classList.remove('has-file');
+        });
+
+        // Add loading state to form
+        form.addEventListener('submit', function() {
+            const submitButton = this.querySelector('.submit-button');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        });
+    </script>
+</body>
+</html>
