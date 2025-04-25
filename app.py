@@ -15,8 +15,8 @@ from datetime import datetime, timedelta
 # ✅ Initialize Flask App
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join('mysite','static', 'uploads')
-app.config['MODEL_PATH'] = 'mysite/fingerprint_model2.h5'
-app.config['DATA_FOLDER'] = 'mysite/data'
+app.config['MODEL_PATH'] = 'fingerprint_model2.h5'
+app.config['DATA_FOLDER'] = 'data'
 
 # Configure Gemini API
 GEMINI_API_KEY = "AIzaSyCaomXYLvpJbiZUCspt56Fs8L07LVHS__0"
