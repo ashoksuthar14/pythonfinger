@@ -19,7 +19,7 @@ app.config['MODEL_PATH'] = 'mysite/fingerprint_model2.h5'
 app.config['DATA_FOLDER'] = 'mysite/data'
 
 # Configure Gemini API
-GEMINI_API_KEY = "AIzaSyCGdMKcR4YGN1572kTed4pG5ogRURHg0zU"
+GEMINI_API_KEY = "AIzaSyCaomXYLvpJbiZUCspt56Fs8L07LVHS__0"
 genai.configure(api_key=GEMINI_API_KEY)
 gemini_model = genai.GenerativeModel('gemini-pro')
 
@@ -83,17 +83,11 @@ def compare_fingerprints(uploaded_features):
 
 def generate_person_info():
     """Generate random person information using Gemini API."""
-    prompt = """Generate a random person's information for a pension system in Kenya. Include:
-    1. Full Name (Kenyan name)
-    2. Age (between 55-75)
-    3. Place (specific city/town in Kenya)
-    4. Date of Birth
-    5. National ID Number (8 digits)
-    6. Occupation (previous, now retired)
-    7. Years of Service
-    8. Monthly Pension Amount (in Kenyan Shilling)
-    9. Bank Account Number (12 digits)
-    10. Contact Number (Kenya format)
+    prompt = """Generate a  person's information for a pension system in Kenya. Include:
+    1. Full Name : Akash or Lithin
+    2. Age : 20
+    3. Place :India
+    4. Department : AI
     
     Format as JSON. Use realistic Kenyan details."""
 
