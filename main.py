@@ -191,7 +191,7 @@ st.markdown("""
 
 # Initialize configurations
 MODEL_PATH = 'fingerprint_model2.h5'
-DATA_FOLDER = 'data'
+DATA_FOLDER = 'Data'
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
