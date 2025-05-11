@@ -81,11 +81,11 @@ def compare_fingerprints(uploaded_features):
 def generate_person_info(name):
     return {
         "full_name": name,
-        "age": random.randint(55, 75),
-        "place": random.choice(["Nairobi", "Mombasa"]),
+        "age": random.randint(19, 21),
+        "place": random.choice(["Hyderabad", "Telanagana"]),
         "date_of_birth": f"{random.randint(1950, 1970)}-01-01",
         "national_id_number": f"{random.randint(10000000, 99999999)}",
-        "occupation": "Civil Servant",
+        "occupation": "Student",
         "years_of_service": random.randint(25, 35),
         "monthly_pension_amount": f"{random.randint(30000, 80000):,}",
         "bank_account_number": f"{random.randint(100000000000, 999999999999)}",
