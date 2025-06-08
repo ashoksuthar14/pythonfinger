@@ -78,19 +78,25 @@ def compare_fingerprints(uploaded_features):
                 best_match = file
     return best_match, best_similarity
 
+
 def generate_person_info(name):
+    dob = "2025-06-25"
+    today = date.today()
+    birth_date = date.fromisoformat(dob)
+    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+    roll_number = f"22911A35{random.randint(10, 99)}"
+
     return {
-        "full_name": name,
-        "age": random.randint(19, 21),
-        "place": random.choice(["Hyderabad", "Telanagana"]),
-        "date_of_birth": f"{random.randint(1950, 1970)}-01-01",
-        "national_id_number": f"{random.randint(10000000, 99999999)}",
-        "occupation": "Student",
-        "years_of_service": random.randint(25, 35),
-        "monthly_pension_amount": f"{random.randint(30000, 80000):,}",
-        "bank_account_number": f"{random.randint(100000000000, 999999999999)}",
-        "contact_number": f"+254 {random.randint(700000000, 799999999)}"
+        "Name": name,
+        "Roll Number": roll_number,
+        "Age": age,
+        "Date of Birth": dob,
+        "College": "VJIT",
+        "Branch": "AI",
+        "Email": "22f3000555@ds.study.iitm.ac.in"
     }
+
 
 def main():
     st.markdown('<div class="main-header"><h1>Comprehensive Biometric</h1></div>', unsafe_allow_html=True)
