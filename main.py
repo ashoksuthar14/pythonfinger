@@ -10,6 +10,8 @@ from datetime import datetime
 from scipy.spatial.distance import cosine
 import io
 import random
+from datetime import date
+
 
 # Configure page
 st.set_page_config(
